@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import helpz.ImgFix;
 import helpz.LoadSave;
 import main.Game;
+import managers.EnemyManager;
 import managers.TileManager;
 import objects.Tile;
 import ui.ActionBar;
@@ -18,6 +19,8 @@ public class Playing extends GameScene implements SceneMethods{
 	private int[][] lvl;
 	private ActionBar bottomBar;
 	private Tile selectedTile;
+	private EnemyManager enemyManager;
+	
 	private boolean drawSelect;
 	
 	private int mouseX, mouseY;
@@ -25,8 +28,12 @@ public class Playing extends GameScene implements SceneMethods{
 	
 	public Playing(Game game) {
 		super(game);
+		
 		loadDefaultLevel();
-					bottomBar = new ActionBar(0,640,640,100, this); //this is the location for the bottom 100 pixels for the bottom bar
+		
+		bottomBar = new ActionBar(0,640,640,100, this); //this is the location for the bottom 100 pixels for the bottom bar
+		
+		enemyManager = new EnemyManager(this);
 	}
 
 	private void loadDefaultLevel() {
@@ -37,11 +44,17 @@ public class Playing extends GameScene implements SceneMethods{
 	{
 		this.lvl = lvl;
 	}
+	
+	public void update()
+	{
+		enemyManager.update();
+	}
 
 	@Override
 	public void render(Graphics g) {
 		drawLevel(g);		
 		bottomBar.draw(g);
+		enemyManager.draw(g);
 	}
 	
 	private void drawLevel(Graphics g)
@@ -67,6 +80,8 @@ public class Playing extends GameScene implements SceneMethods{
 		{
 			bottomBar.mouseClicked(x, y);
 		}
+		else
+			enemyManager.addEnemy(x, y);
 	}
 
 
