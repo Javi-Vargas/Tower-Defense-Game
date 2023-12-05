@@ -16,6 +16,9 @@ public class Editing extends GameScene implements SceneMethods{
 	
 	private boolean drawSelect;
 	private Toolbar toolbar;
+	private int animationIndex;
+	private int tick;
+	private int ANIMATION_SPEED = 25;
 	
 	
 	public Editing(Game game)
@@ -28,11 +31,24 @@ public class Editing extends GameScene implements SceneMethods{
 
 	@Override
 	public void render(Graphics g) {
+		updateTick();
 		drawLevel(g);
 		toolbar.draw(g);
 		drawSelectedTile(g);		
 	}
 	
+	private void updateTick() {
+		tick++;
+		if(tick>=ANIMATION_SPEED)	//change this number to adjust animation speed
+			//the higher the # the slower the animation
+		{
+			tick=0;
+			animationIndex++;
+			if(animationIndex>=4)
+			{animationIndex = 0;}
+		}
+	}
+
 	private void drawLevel(Graphics g)
 	{
 		for(int y=0; y<lvl.length;y++)
@@ -40,14 +56,30 @@ public class Editing extends GameScene implements SceneMethods{
 			for(int x=0;x<lvl[y].length;x++)
 			{
 				int id = lvl[y][x];
-				g.drawImage(getSprite(id), x*32, y*32, null);
+				//a check to see if id represents an animation sprite
+				if(isAnimation(id))
+				{
+					g.drawImage(getSprite(id, animationIndex), x*32, y*32, null);
+				}
+				else
+					g.drawImage(getSprite(id), x*32, y*32, null);
 			}
 		}
 	}
 	
-	public BufferedImage getSprite(int spriteID)
+	private boolean isAnimation(int spriteID) {
+
+		return game.getTileManager().isSpriteAnimation(spriteID);
+	}
+
+	private BufferedImage getSprite(int spriteID)
 	{
 		return game.getTileManager().getSprite(spriteID);
+	}
+	
+	private BufferedImage getSprite(int spriteID, int animationIndex)
+	{
+		return game.getTileManager().getAniSprite(spriteID, animationIndex);
 	}
 		
 	private void loadDefaultLevel() {
