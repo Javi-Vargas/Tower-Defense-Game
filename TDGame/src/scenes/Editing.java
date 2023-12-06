@@ -17,38 +17,31 @@ public class Editing extends GameScene implements SceneMethods{
 	private boolean drawSelect;
 	private Toolbar toolbar;
 	private int animationIndex;
-	private int tick;
-	private int ANIMATION_SPEED = 25;
+//	private int tick;
+//	private int ANIMATION_SPEED = 25;
 	
 	
 	public Editing(Game game)
 	{
 		super(game);
 		loadDefaultLevel();
-
 		toolbar = new Toolbar(0,640,640,100, this);
 	}
 
 	@Override
 	public void render(Graphics g) {
-		updateTick();
 		drawLevel(g);
 		toolbar.draw(g);
 		drawSelectedTile(g);		
 	}
 	
-	private void updateTick() {
-		tick++;
-		if(tick>=ANIMATION_SPEED)	//change this number to adjust animation speed
-			//the higher the # the slower the animation
-		{
-			tick=0;
-			animationIndex++;
-			if(animationIndex>=4)
-			{animationIndex = 0;}
-		}
-	}
+	//removed updateTick() because it was placed in the super class GameScene
 
+	public void update()
+	{
+		updateTick(); //now we can go to the game and call update in the editing switch case
+	}
+	
 	private void drawLevel(Graphics g)
 	{
 		for(int y=0; y<lvl.length;y++)
@@ -67,21 +60,8 @@ public class Editing extends GameScene implements SceneMethods{
 		}
 	}
 	
-	private boolean isAnimation(int spriteID) {
+	//isAnimation & both getSprite()'s also moved to the super class for playing and editing scene
 
-		return game.getTileManager().isSpriteAnimation(spriteID);
-	}
-
-	private BufferedImage getSprite(int spriteID)
-	{
-		return game.getTileManager().getSprite(spriteID);
-	}
-	
-	private BufferedImage getSprite(int spriteID, int animationIndex)
-	{
-		return game.getTileManager().getAniSprite(spriteID, animationIndex);
-	}
-		
 	private void loadDefaultLevel() {
 		lvl = LoadSave.GetLevelData("new_level");
 	}

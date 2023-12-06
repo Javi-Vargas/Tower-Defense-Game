@@ -80,6 +80,7 @@ public class Game extends JFrame implements Runnable{	//the class that will run 
 		switch(GameStates.gameState)
 		{
 		case EDIT:
+			editing.update();
 			break;
 		case MENU:
 			break;

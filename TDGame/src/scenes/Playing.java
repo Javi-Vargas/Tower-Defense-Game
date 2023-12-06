@@ -18,13 +18,12 @@ public class Playing extends GameScene implements SceneMethods{
 
 	private int[][] lvl;
 	private ActionBar bottomBar;
-	private Tile selectedTile;
 	private EnemyManager enemyManager;
-	
-	private boolean drawSelect;
-	
 	private int mouseX, mouseY;
-	private int lastTileX, lastTileY, lastTileId;
+	
+	//private boolean drawSelect;	
+	///private Tile selectedTile;
+	//private int lastTileX, lastTileY, lastTileId;
 	
 	public Playing(Game game) {
 		super(game);
@@ -47,6 +46,7 @@ public class Playing extends GameScene implements SceneMethods{
 	
 	public void update()
 	{
+		updateTick();
 		enemyManager.update();
 	}
 
@@ -64,14 +64,34 @@ public class Playing extends GameScene implements SceneMethods{
 			for(int x=0;x<lvl[y].length;x++)
 			{
 				int id = lvl[y][x];
-				g.drawImage(getSprite(id), x*32, y*32, null);
+				if(isAnimation(id))
+				{
+					g.drawImage(getSprite(id, animationIndex), x*32, y*32, null);
+				}
+				else
+					g.drawImage(getSprite(id), x*32, y*32, null);
 			}
 		}
 	}
 	
-	public BufferedImage getSprite(int spriteID)
+
+	
+	public int getTileType(int x, int y)
 	{
-		return game.getTileManager().getSprite(spriteID);
+		int xCord = x/32;
+		int yCord = y/32;
+		
+		if(xCord <0 || yCord > 19)
+		{
+			return 0;
+		}
+		if(yCord <0 || xCord > 19)
+		{
+			return 0;
+		}			//these checks are to account for enemies walking out of bounds
+		
+		int id = lvl[y/32][x/32];
+		return game.getTileManager().getTile(id).getTileType();
 	}
 
 	@Override
@@ -90,11 +110,11 @@ public class Playing extends GameScene implements SceneMethods{
 		if(y>= 640)
 		{
 			bottomBar.mouseMoved(x, y);
-			drawSelect = false;
+			//drawSelect = false;
 		}
 		else
 		{
-			drawSelect = true;
+			//drawSelect = true;
 			mouseX=(x/32)*32;
 			mouseY = (y/32)*32;	//makes the slected tile display snap onto the square so you can see where to place items later
 		}

@@ -1,6 +1,7 @@
 package enemies;
 
 import java.awt.Rectangle;
+import static helpz.Constants.Direction.*;
 
 public class Enemy {
 
@@ -9,20 +10,44 @@ public class Enemy {
 	private int health;
 	private int ID;
 	private int enemyType;
+	private int lastDir;
 	
-	public Enemy(float x, float y, int id, int enemyType)
+	//can Pick up at 4min in the video episode 14
+	public Enemy(float x, float y, int ID, int enemyType)
 	{
 		this.x=x;
 		this.y =y;
 		this.ID = ID;
 		this.enemyType = enemyType;
 		bounds = new Rectangle((int)x, (int)y, 32,32);
+		lastDir = RIGHT;
 	}
 	
-	public void move(float x, float y)
+	public void move(float speed, int dir)
 	{
-		this.x+=x;
-		this.y+=y;
+		lastDir = dir;
+		switch(dir)
+		{
+		case LEFT:
+			this.x -= speed;
+			break;
+		case UP:
+			this.y -= speed;
+			break;
+		case RIGHT:
+			this.x += speed;
+			break;
+		case DOWN:
+			this.y += speed;
+			break;
+		}
+	}
+	
+	public void setPos(int x, int y)
+	{
+		//dont use this one for movement. It is for posFix
+		this.x =x;
+		this.y = y;
 	}
 
 	public float getX() {
@@ -47,6 +72,10 @@ public class Enemy {
 
 	public int getEnemyType() {
 		return enemyType;
+	}
+	
+	public int getLastDir() {
+		return lastDir;
 	}
 	
 	
