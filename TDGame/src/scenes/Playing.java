@@ -9,6 +9,7 @@ import helpz.LoadSave;
 import main.Game;
 import managers.EnemyManager;
 import managers.TileManager;
+import managers.TowerManager;
 import objects.PathPoint;
 import objects.Tile;
 import ui.ActionBar;
@@ -22,6 +23,7 @@ public class Playing extends GameScene implements SceneMethods{
 	private ActionBar actionBar;
 	private EnemyManager enemyManager;
 	private int mouseX, mouseY;
+	private TowerManager towerManager;
 	private PathPoint start,end;
 	
 	public Playing(Game game) {
@@ -32,6 +34,7 @@ public class Playing extends GameScene implements SceneMethods{
 		actionBar = new ActionBar(0,640,640,160, this); //this is the location for the bottom 100 pixels for the bottom bar
 		
 		enemyManager = new EnemyManager(this, start, end);
+		towerManager = new TowerManager(this);
 		
 		
 	}
@@ -52,6 +55,7 @@ public class Playing extends GameScene implements SceneMethods{
 	{
 		updateTick();
 		enemyManager.update();
+		towerManager.update();	//created an update method for the towerManager
 	}
 
 	@Override
@@ -59,6 +63,7 @@ public class Playing extends GameScene implements SceneMethods{
 		drawLevel(g);		
 		actionBar.draw(g);
 		enemyManager.draw(g);
+		towerManager.draw(g);	//added this to draw enemies on the level
 	}
 	
 	private void drawLevel(Graphics g)
