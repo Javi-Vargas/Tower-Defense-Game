@@ -25,7 +25,7 @@ public class GameScreen extends JPanel{	//a class for the gamescreen so we can g
 	public void initInputs()
 	{
 		myMouseListener = new MyMouseListener(game);
-		keyboardListener = new KeyboardListener();
+		keyboardListener = new KeyboardListener(game);
 		
 		addMouseListener(myMouseListener);
 		addMouseMotionListener(myMouseListener);
@@ -35,7 +35,7 @@ public class GameScreen extends JPanel{	//a class for the gamescreen so we can g
 	}
 	
 	private void setPanelSize() {
-		size = new Dimension(640,740);
+		size = new Dimension(640,800);	//made the actionBar a little larger for more buttons
 		setMinimumSize(size);
 		setPreferredSize(size);
 		setMaximumSize(size);

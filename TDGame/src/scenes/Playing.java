@@ -2,12 +2,14 @@ package scenes;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import helpz.ImgFix;
 import helpz.LoadSave;
 import main.Game;
 import managers.EnemyManager;
 import managers.TileManager;
+import objects.PathPoint;
 import objects.Tile;
 import ui.ActionBar;
 import ui.MyButton;
@@ -17,26 +19,28 @@ import static main.GameStates.*;
 public class Playing extends GameScene implements SceneMethods{
 
 	private int[][] lvl;
-	private ActionBar bottomBar;
+	private ActionBar actionBar;
 	private EnemyManager enemyManager;
 	private int mouseX, mouseY;
-	
-	//private boolean drawSelect;	
-	///private Tile selectedTile;
-	//private int lastTileX, lastTileY, lastTileId;
+	private PathPoint start,end;
 	
 	public Playing(Game game) {
 		super(game);
 		
 		loadDefaultLevel();
 		
-		bottomBar = new ActionBar(0,640,640,100, this); //this is the location for the bottom 100 pixels for the bottom bar
+		actionBar = new ActionBar(0,640,640,160, this); //this is the location for the bottom 100 pixels for the bottom bar
 		
-		enemyManager = new EnemyManager(this);
+		enemyManager = new EnemyManager(this, start, end);
+		
+		
 	}
 
 	private void loadDefaultLevel() {
 		lvl = LoadSave.GetLevelData("new_level");
+		ArrayList<PathPoint> points = LoadSave.GetLevelPathPoints("new_level");
+		start = points.get(0);
+		end = points.get(1);
 	}
 	
 	public void setLevel(int[][] lvl)
@@ -53,7 +57,7 @@ public class Playing extends GameScene implements SceneMethods{
 	@Override
 	public void render(Graphics g) {
 		drawLevel(g);		
-		bottomBar.draw(g);
+		actionBar.draw(g);
 		enemyManager.draw(g);
 	}
 	
@@ -98,10 +102,11 @@ public class Playing extends GameScene implements SceneMethods{
 	public void mouseClicked(int x, int y) {
 		if(y>= 640)
 		{
-			bottomBar.mouseClicked(x, y);
+			actionBar.mouseClicked(x, y);
 		}
 		else
-			enemyManager.addEnemy(x, y);
+			enemyManager.addEnemy(x);
+			//enemyManager.addEnemy(x, y, y);
 	}
 
 
@@ -109,7 +114,7 @@ public class Playing extends GameScene implements SceneMethods{
 	public void mouseMoved(int x, int y) {
 		if(y>= 640)
 		{
-			bottomBar.mouseMoved(x, y);
+			actionBar.mouseMoved(x, y);
 			//drawSelect = false;
 		}
 		else
@@ -124,14 +129,14 @@ public class Playing extends GameScene implements SceneMethods{
 	public void mousePressed(int x, int y) {
 		if(y>= 640)
 		{
-			bottomBar.mousePressed(x, y);
+			actionBar.mousePressed(x, y);
 		}
 
 	}
 
 	@Override
 	public void mouseReleased(int x, int y) {
-		bottomBar.mouseReleased(x, y);
+		actionBar.mouseReleased(x, y);
 	}
 
 

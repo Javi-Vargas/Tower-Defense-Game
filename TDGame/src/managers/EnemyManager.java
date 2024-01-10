@@ -1,13 +1,19 @@
 package managers;
 
 import java.awt.Graphics;
+import static helpz.Constants.Enemies.*;
 import static helpz.Constants.Direction.*;
 import static helpz.Constants.Tiles.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import enemies.Bat;
 import enemies.Enemy;
+import enemies.Knight;
+import enemies.Orc;
+import enemies.Wolf;
 import helpz.LoadSave;
+import objects.PathPoint;
 import scenes.Playing;
 
 public class EnemyManager {
@@ -16,12 +22,18 @@ public class EnemyManager {
 	private BufferedImage[] enemyImgs; //list to hold all our enemys
 	private ArrayList<Enemy> enemies = new ArrayList<>();
 	private float speed = 0.5f;	//for enemy speed
-	
-	public EnemyManager(Playing playing)
+	private PathPoint start,end;
+
+	public EnemyManager(Playing playing, PathPoint start, PathPoint end)
 	{
 		this.playing = playing;
 		enemyImgs = new BufferedImage[4]; //we'll have 4 enemies
-		addEnemy(3*32,9*32);
+		this.start = start;
+		this.end = end;	// this updates the previous method of adding enemies to where we already provide where its gonna be 
+		addEnemy(ORC);
+		addEnemy(BAT);
+		addEnemy(KNIGHT);
+		addEnemy(WOLF);
 		loadEnemyImgs();
 	}
 	
@@ -29,28 +41,25 @@ public class EnemyManager {
 		//this method loads the image once and remove it instead of accessing the atlas each time for an enemy
 		//not a huge deal rn cuz we only have 4 enemies but when scaled can be a performance problem
 		BufferedImage atlas = LoadSave.getSpriteAtlas();
-		enemyImgs[0] = atlas.getSubimage(0, 32, 32, 32);
-		enemyImgs[1] = atlas.getSubimage(32*1, 32, 32, 32);
-		enemyImgs[2] = atlas.getSubimage(32*2, 32, 32, 32);
-		enemyImgs[3] = atlas.getSubimage(32*3, 32, 32, 32);
+		for(int i=0; i<4;i++)
+			enemyImgs[i] = atlas.getSubimage(i*32, 32, 32, 32);
 	}
 
 	public void update()
 	{
-		//testEnemy.move(.5f, 0);
 		for(Enemy e: enemies)
 		{
-			//check for enemy if next tile is road(pos, dir)
-			if(isNextTileRoad(e))
-			{
-				//move enemy
-				//setNewDirectionAndMove(e);
-			}
+			updateEnemyMove(e);
 		}
 			
 	}
 	
-	private boolean isNextTileRoad(Enemy e) {
+	private void updateEnemyMove(Enemy e) {
+		if(e.getLastDir() == -1)
+		{
+			setNewDirectionAndMove(e);
+		}
+		
 		//e pos
 		//e dir
 		//tile at new possible position
@@ -64,14 +73,12 @@ public class EnemyManager {
 		}
 		else if(isAtEnd(e))
 		{
-			
+			System.out.println("Lives Lost");
 		}
 		else
 		{
-			//find new direction
 			setNewDirectionAndMove(e);
-		}	
-		return false;
+		}
 	}
 	
 	private void setNewDirectionAndMove(Enemy e) {
@@ -82,6 +89,11 @@ public class EnemyManager {
 		int yCord = (int) (e.getY() / 32);
 		
 		fixEnemyOffsetTile(e, dir, xCord, yCord);
+		
+		if(isAtEnd(e))
+		{
+			return;
+		}
 		
 		if(dir==LEFT || dir == RIGHT)
 		{
@@ -112,15 +124,6 @@ public class EnemyManager {
 	private void fixEnemyOffsetTile(Enemy e, int dir, int xCord, int yCord) {
 		switch(dir)
 		{
-//		case LEFT: 
-//			if(xCord > 0)
-//				xCord--;
-//			break;
-//		case UP: 
-//			if(yCord > 0)
-//				yCord--;
-//			break;
-		//dont need the left and up adjustments 
 		case RIGHT:
 			if (xCord < 19)
 				xCord++;
@@ -135,7 +138,10 @@ public class EnemyManager {
 	}
 
 	private boolean isAtEnd(Enemy e) {
-		// TODO Auto-generated method stub
+		if(e.getX() == end.getxCord() * 32)
+			if(e.getY() == end.getyCord()* 32)
+				return true;
+				
 		return false;
 	}
 
@@ -162,9 +168,28 @@ public class EnemyManager {
 		return 0;
 	}
 
-	public void addEnemy(int x, int y)
-	{
-		enemies.add(new Enemy(x, y, 0, 0));	//create an enemy in the map		
+	public void addEnemy(int enemyType)
+	{//create an enemy in the map	
+		
+		int x = start.getxCord()*32;
+		int y = start.getyCord()*32;
+		
+		switch(enemyType)
+		{
+		case ORC:
+			enemies.add(new Orc(x, y, 0));		
+			break;
+		case BAT:
+			enemies.add(new Bat(x, y, 0));		
+			break;
+		case KNIGHT:
+			enemies.add(new Knight(x, y, 0));		
+			break;
+		case WOLF:
+			enemies.add(new Wolf(x, y, 0));		
+			break;
+			
+		}
 	}
 	
 	public void draw(Graphics g) {
@@ -173,6 +198,6 @@ public class EnemyManager {
 	}
 	
 	private void drawEnemy(Enemy e, Graphics g) {
-		g.drawImage(enemyImgs[0], (int) e.getX(), (int) e.getY(), null);
+		g.drawImage(enemyImgs[e.getEnemyType()], (int) e.getX(), (int) e.getY(), null);
 	}
 }
