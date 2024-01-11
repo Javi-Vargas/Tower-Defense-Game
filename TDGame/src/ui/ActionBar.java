@@ -81,12 +81,20 @@ public class ActionBar extends Bar{
 			g.drawString("" + Towers.GetName(displayedTower.getTowerType()), 490, 660);
 			g.drawString("ID: " + displayedTower.getTowerType(), 490, 675);
 			
-			drawDisplayeddTowerBorder(g);
+			drawDisplayedTowerBorder(g);
+			drawDisplayedTowerRange(g);
 }
 	}
 
 
-	private void drawDisplayeddTowerBorder(Graphics g) {
+	private void drawDisplayedTowerRange(Graphics g) {
+		g.setColor(Color.white);
+		g.drawOval(displayedTower.getX()+ 16 - (int)displayedTower.getRange()/2, displayedTower.getY()+16 - (int)displayedTower.getRange()/2
+				, (int)displayedTower.getRange(),(int)displayedTower.getRange());
+	}
+
+
+	private void drawDisplayedTowerBorder(Graphics g) {
 		g.setColor(Color.blue);
 		g.drawRect(displayedTower.getX(), displayedTower.getY(), 32, 32);
 	}

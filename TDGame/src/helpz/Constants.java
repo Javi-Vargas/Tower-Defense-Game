@@ -21,6 +21,48 @@ public class Constants {
 			}
 			return "";
 		}
+		
+		public static float GetStartDmg(int towerType)
+		{
+			switch(towerType)
+			{
+			case CANNON:
+				return 25;
+			case ARCHER:
+				return 15;
+			case WIZARD:
+				return 5;
+			}
+			return 0;
+		}
+		
+		public static float GetStartRange(int towerType)
+		{
+			switch(towerType)
+			{
+			case CANNON:
+				return 100;
+			case ARCHER:
+				return 100;
+			case WIZARD:
+				return 100;
+			}
+			return 0;
+		}
+		
+		public static float GetStartCooldown(int towerType)
+		{
+			switch(towerType)
+			{
+			case CANNON:
+				return 10;
+			case ARCHER:
+				return 10;
+			case WIZARD:
+				return 10;
+			}
+			return 0;
+		}
 	}
 	
 	public static class Direction {
@@ -56,6 +98,22 @@ public class Constants {
 				return .75f;
 			}
 			
+			return 0;
+		}
+
+		public static int getStartHealth(int enemyType) {
+			switch(enemyType)
+			{
+			case ORC:
+				return 100;
+			case BAT:
+				return 60;
+			case KNIGHT:
+				return 250;
+			case WOLF:
+				return 85;
+			}
+				
 			return 0;
 		}
 	}

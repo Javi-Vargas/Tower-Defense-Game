@@ -1,5 +1,6 @@
 package managers;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import static helpz.Constants.Enemies.*;
 import static helpz.Constants.Direction.*;
@@ -23,6 +24,7 @@ public class EnemyManager {
 	private ArrayList<Enemy> enemies = new ArrayList<>();
 	//private float speed = 0.5f;	//for enemy speed
 	private PathPoint start,end;
+	private int HPbarWidth = 20;
 
 	public EnemyManager(Playing playing, PathPoint start, PathPoint end)
 	{
@@ -193,10 +195,23 @@ public class EnemyManager {
 	}
 	
 	public void draw(Graphics g) {
-		for(Enemy e: enemies)	
+		for(Enemy e: enemies)
+		{
 			drawEnemy(e, g);
+			drawHealthBar(e,g);
+		}
 	}
 	
+	private void drawHealthBar(Enemy e, Graphics g) {
+		g.setColor(Color.red);
+		g.fillRect((int)e.getX()+16-(getNewBarWidth(e)/2), (int)e.getY()-10, getNewBarWidth(e), 3);
+	}
+	
+	private int getNewBarWidth(Enemy e)	//method to update the healthbar as it takes dmg
+	{
+		return (int) (HPbarWidth * e.getHealthBarFloat());
+	}
+
 	private void drawEnemy(Enemy e, Graphics g) {
 		g.drawImage(enemyImgs[e.getEnemyType()], (int) e.getX(), (int) e.getY(), null);
 	}
