@@ -126,8 +126,15 @@ public class Playing extends GameScene implements SceneMethods{
 					}
 				}
 			}
-			//enemyManager.addEnemy(x);
-			//enemyManager.addEnemy(x, y, y);
+			else
+			{
+				//get tower if exists on x,y
+				Tower t = getTowerAt(mouseX, mouseY);
+//				if(t== null)
+//					return;
+//				else
+					actionBar.displayTower(t);
+			}
 	}
 
 

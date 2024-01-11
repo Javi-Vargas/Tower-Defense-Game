@@ -4,8 +4,10 @@ import static main.GameStates.MENU;
 import static main.GameStates.SetGameState;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
+import helpz.Constants.Towers;
 import objects.Tower;
 import scenes.Playing;
 
@@ -16,6 +18,7 @@ public class ActionBar extends Bar{
 	
 	private MyButton[] towerButtons;
 	private Tower selectedTower;
+	private Tower displayedTower;
 		
 	public ActionBar(int x, int y, int width, int height, Playing playing)
 	{
@@ -60,8 +63,27 @@ public class ActionBar extends Bar{
 		
 		//buttons
 		drawButtons(g);
+		
+		//DisplayedTOwer
+		drawDisplayedTower(g);
 	}
 	
+	private void drawDisplayedTower(Graphics g) {
+		if(displayedTower != null)
+		{
+			g.setColor(Color.gray);
+			g.fillRect(410,  645,  220, 85);
+			g.setColor(Color.black);
+			g.drawRect(410, 645, 220, 85);
+			g.drawRect(420, 650, 50, 50);
+			g.drawImage(playing.getTowerManager().getTowerImgs()[displayedTower.getTowerType()],420, 650, 50, 50, null);
+			g.setFont(new Font("Impact", Font.BOLD, 15));
+			g.drawString("" + Towers.GetName(displayedTower.getTowerType()), 490, 660);
+			g.drawString("ID: " + displayedTower.getTowerType(), 490, 675);
+}
+	}
+
+
 	public void mouseClicked(int x, int y) {
 		if (bMenu.getBounds().contains(x, y))
 			SetGameState(MENU);
@@ -109,5 +131,10 @@ public class ActionBar extends Bar{
 		bMenu.resetBooleans();
 		for (MyButton b : towerButtons)
 			b.resetBooleans();
+	}
+
+
+	public void displayTower(Tower t) {
+		displayedTower = t;
 	}
 }
