@@ -53,4 +53,12 @@ public class TowerManager {
 		//g.drawImage(towerImgs[ARCHER], tower.getX(), tower.getY(), null);
 	}
 
+	public Tower getTowerAt(int x, int y) {
+		for(Tower t: towers)
+			if(t.getX() == x)
+				if(t.getY() == y)
+					return t;
+		return null;
+	}
+
 }

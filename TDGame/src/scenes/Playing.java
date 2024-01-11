@@ -119,14 +119,21 @@ public class Playing extends GameScene implements SceneMethods{
 			{
 				if(isTileGrass(mouseX,mouseY))
 				{
-					towerManager.addTower(selectedTower, mouseX, mouseY);
-					selectedTower = null;
+					if(getTowerAt(mouseX, mouseY) == null)
+					{
+						towerManager.addTower(selectedTower, mouseX, mouseY);
+						selectedTower = null;						
+					}
 				}
 			}
 			//enemyManager.addEnemy(x);
 			//enemyManager.addEnemy(x, y, y);
 	}
 
+
+	private Tower getTowerAt(int x, int y) {
+		return towerManager.getTowerAt(x,y);
+	}
 
 	private boolean isTileGrass(int x, int y) {
 		int id = lvl[y / 32][x / 32];
