@@ -14,6 +14,8 @@ public abstract class Enemy {
 	protected int maxHealth;
 	protected int enemyType;
 	protected int lastDir;
+	protected boolean alive = true;
+	
 	
 	//can Pick up at 4min in the video episode 14
 	public Enemy(float x, float y, int ID, int enemyType)
@@ -31,6 +33,12 @@ public abstract class Enemy {
 	{
 		health = helpz.Constants.Enemies.getStartHealth(enemyType);
 		maxHealth = health;
+	}
+	
+	public void hurt(int dmg) {
+		this.health -= dmg;
+		if(health <= 0)
+			alive = false;
 	}
 	
 	public void move(float speed, int dir)
@@ -91,6 +99,11 @@ public abstract class Enemy {
 	
 	public int getLastDir() {
 		return lastDir;
+	}
+	
+	public boolean isAlive()
+	{
+		return alive;
 	}
 	
 	
