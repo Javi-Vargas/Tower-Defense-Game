@@ -28,6 +28,10 @@ public class KeyboardListener implements KeyListener{
 		{
 			game.getEditor().keyPressed(e);
 		}
+		else if (GameStates.gameState == PLAYING)
+		{
+			game.getPlaying().keyPressed(e);
+		}
 	}
 
 	@Override

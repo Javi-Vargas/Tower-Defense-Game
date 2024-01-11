@@ -1,6 +1,8 @@
 package scenes;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import helpz.LoadSave;
@@ -64,8 +66,15 @@ public class Playing extends GameScene implements SceneMethods{
 		enemyManager.draw(g);
 		towerManager.draw(g);	//added this to draw enemies on the level
 		drawSelectedTower(g);
+		drawHighlight(g);
 	}
 	
+	private void drawHighlight(Graphics g) {
+		g.setColor(Color.yellow);
+		g.drawRect(mouseX, mouseY, 32, 32);
+		
+	}
+
 	private void drawSelectedTower(Graphics g) {
 		if(selectedTower!= null)
 			g.drawImage(towerManager.getTowerImgs()[selectedTower.getTowerType()], mouseX, mouseY, null);
@@ -183,5 +192,10 @@ public class Playing extends GameScene implements SceneMethods{
 	public TowerManager getTowerManager()
 	{
 		return towerManager;
+	}
+
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyChar() == KeyEvent.VK_ESCAPE)
+			selectedTower = null;
 	}
 }

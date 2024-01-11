@@ -80,7 +80,15 @@ public class ActionBar extends Bar{
 			g.setFont(new Font("Impact", Font.BOLD, 15));
 			g.drawString("" + Towers.GetName(displayedTower.getTowerType()), 490, 660);
 			g.drawString("ID: " + displayedTower.getTowerType(), 490, 675);
+			
+			drawDisplayeddTowerBorder(g);
 }
+	}
+
+
+	private void drawDisplayeddTowerBorder(Graphics g) {
+		g.setColor(Color.blue);
+		g.drawRect(displayedTower.getX(), displayedTower.getY(), 32, 32);
 	}
 
 
