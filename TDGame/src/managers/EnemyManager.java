@@ -25,6 +25,7 @@ public class EnemyManager {
 	//private float speed = 0.5f;	//for enemy speed
 	private PathPoint start,end;
 	private int HPbarWidth = 20;
+	private BufferedImage slowEffect;
 
 	public EnemyManager(Playing playing, PathPoint start, PathPoint end)
 	{
@@ -32,6 +33,8 @@ public class EnemyManager {
 		enemyImgs = new BufferedImage[4]; //we'll have 4 enemies
 		this.start = start;
 		this.end = end;	// this updates the previous method of adding enemies to where we already provide where its gonna be 
+		
+		loadEffectImg();
 		addEnemy(ORC);
 		addEnemy(BAT);
 		addEnemy(KNIGHT);
@@ -39,6 +42,29 @@ public class EnemyManager {
 		loadEnemyImgs();
 	}
 	
+	private void loadEffectImg() {
+		slowEffect = LoadSave.getSpriteAtlas().getSubimage(32*9, 32*2, 32, 32);
+	}
+
+	public void draw(Graphics g) {
+		for(Enemy e: enemies)
+		{
+			if(e.isAlive())
+			{
+				drawEnemy(e, g);
+				drawHealthBar(e,g);
+				drawEffects(e,g);
+			}
+		}
+	}
+	
+	private void drawEffects(Enemy e, Graphics g) {
+		if(e.isSlowed())
+		{
+			g.drawImage(slowEffect, (int)e.getX(), (int)e.getY(), null);
+		}
+	}
+
 	private void loadEnemyImgs() {
 		//this method loads the image once and remove it instead of accessing the atlas each time for an enemy
 		//not a huge deal rn cuz we only have 4 enemies but when scaled can be a performance problem
@@ -195,17 +221,6 @@ public class EnemyManager {
 			enemies.add(new Wolf(x, y, 0));		
 			break;
 			
-		}
-	}
-	
-	public void draw(Graphics g) {
-		for(Enemy e: enemies)
-		{
-			if(e.isAlive())
-			{
-				drawEnemy(e, g);
-				drawHealthBar(e,g);
-			}
 		}
 	}
 	

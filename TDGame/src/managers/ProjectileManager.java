@@ -200,13 +200,16 @@ public class ProjectileManager {
 	private boolean isProjHittingEnemy(Projectile p) {
 		for(Enemy e: playing.getEnemyManager().getEnemies()) {
 			if(e.isAlive())
-			{
-				
-			}
-			if(e.getBounds().contains(p.getPos()))
-			{
-				e.hurt(p.getDmg());
-				return true;
+			{				
+				if(e.getBounds().contains(p.getPos()))
+				{
+					e.hurt(p.getDmg());
+					if(p.getProjectileType() == CHAINS)
+					{
+						e.slow();
+					}
+					return true;
+				}
 			}
 		}
 			

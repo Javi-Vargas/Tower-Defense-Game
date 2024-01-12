@@ -15,6 +15,8 @@ public abstract class Enemy {
 	protected int enemyType;
 	protected int lastDir;
 	protected boolean alive = true;
+	protected int slowTickLimit = 120;
+	protected int slowTick = slowTickLimit;
 	
 	
 	//can Pick up at 4min in the video episode 14
@@ -41,9 +43,20 @@ public abstract class Enemy {
 			alive = false;
 	}
 	
+	public void slow() {
+		slowTick = 0;
+	}
+	
 	public void move(float speed, int dir)
 	{
 		lastDir = dir;
+		
+		if(slowTick < slowTickLimit)
+		{
+			slowTick++;
+			speed*= .5f;
+		}
+		
 		switch(dir)
 		{
 		case LEFT:
@@ -113,5 +126,8 @@ public abstract class Enemy {
 		return alive;
 	}
 	
-	
+	public boolean isSlowed()
+	{
+		return slowTick < slowTickLimit;
+	}
 }
