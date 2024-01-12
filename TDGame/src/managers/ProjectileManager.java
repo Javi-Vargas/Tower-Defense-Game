@@ -1,6 +1,7 @@
 package managers;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -40,12 +41,12 @@ public class ProjectileManager {
 	{
 		int type = getProjType(t);
 		
-		int xDist = (int)Math.abs(t.getX() - e.getX());
-		int yDist = (int)Math.abs(t.getY() - e.getY());
+		int xDist = (int)(t.getX() - e.getX());
+		int yDist = (int)(t.getY() - e.getY());
 		
-		int totDist = xDist + yDist;
+		int totDist = Math.abs(xDist) + Math.abs(yDist);
 		
-		float xPercent = (float) xDist / totDist;
+		float xPercent = (float) Math.abs(xDist) / totDist;
 
 		float xSpeed = xPercent * helpz.Constants.Projectiles.GetSpeed(type);
 		float ySpeed = helpz.Constants.Projectiles.GetSpeed(type) - xSpeed;
@@ -55,7 +56,13 @@ public class ProjectileManager {
 		if(t.getY() > e.getY())
 			ySpeed *= -1;
 		
-		projectiles.add(new Projectile(t.getX()+16, t.getY()+16, xSpeed, ySpeed, t.getDmg(), proj_id++, type));
+		float arcValue = (float)Math.atan(yDist / (float)xDist);
+		float rotate = (float)Math.toDegrees(arcValue);
+		
+		if(xDist < 0)
+			rotate += 180;
+		
+		projectiles.add(new Projectile(t.getX()+16, t.getY()+16, xSpeed, ySpeed, t.getDmg(), rotate, proj_id++, type));
 		
 	}
 	
@@ -74,9 +81,19 @@ public class ProjectileManager {
 
 	public void draw(Graphics g)
 	{
-		for(Projectile p : projectiles)
-			if(p.isActive())	
-				g.drawImage(proj_imgs[p.getProjectileType()], (int)p.getPos().x, (int)p.getPos().y, null);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		
+		
+		for(Projectile p : projectiles)	//add projectile rotation to be more realistic
+			if(p.isActive()) {
+				g2d.translate(p.getPos().x, p.getPos().y);
+				g2d.rotate(Math.toRadians(p.getRotation()));
+				g2d.drawImage(proj_imgs[p.getProjectileType()], -16, -16, null);
+				g2d.rotate(-Math.toRadians(p.getRotation()));
+				g2d.translate(-p.getPos().x, -p.getPos().y);
+			}
+		
 	}
 	
 	public void update()

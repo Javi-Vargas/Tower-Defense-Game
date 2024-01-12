@@ -1,4 +1,4 @@
- package managers;
+package managers;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
