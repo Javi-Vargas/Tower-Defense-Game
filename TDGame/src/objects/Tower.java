@@ -3,8 +3,8 @@ package objects;
 //created tower object class
 public class Tower {
 	
-	private int x,y,id,towerType;
-	private float dmg, range, cooldown;
+	private int x,y,id,towerType, dmg,coolDownTick;
+	private float  range, cooldown;
 	public Tower(int x, int y, int id, int towerType)
 	{
 		this.x=x;
@@ -14,6 +14,19 @@ public class Tower {
 		setDefaultDmg();
 		setDefaultRange();
 		setDefaultCooldown();
+	}
+	
+	public void update()
+	{
+		coolDownTick++;
+	}
+	
+	public void resetCooldown() {
+		coolDownTick = 0;
+	}
+
+	public boolean isCoolDownOver() {
+		return coolDownTick >= cooldown;
 	}
 
 	private void setDefaultDmg() {
@@ -60,7 +73,7 @@ public class Tower {
 		this.towerType = towerType;
 	}
 
-	public float getDmg() {
+	public int getDmg() {
 		return dmg;
 	}
 

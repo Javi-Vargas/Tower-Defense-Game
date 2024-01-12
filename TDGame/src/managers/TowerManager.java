@@ -1,4 +1,4 @@
-package managers;
+ package managers;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -39,19 +39,26 @@ public class TowerManager {
 	
 	public void update()
 	{
-		attackEnemyIfClose();
-	}
-	
-	private void attackEnemyIfClose() {
 		for(Tower t: towers)
 		{
+			t.update();
+			attackEnemyIfClose(t);
+		}
+	}
+	
+	private void attackEnemyIfClose(Tower t) {
 			for(Enemy e: playing.getEnemyManager().getEnemies())
 			{
 				if(e.isAlive())
 				{
 					if(isEnemyInRange(t,e))
 					{	//if in range shoot enemy
-						e.hurt(1);
+						if(t.isCoolDownOver())
+						{
+							playing.shootEnemy(t, e);
+							t.resetCooldown();
+						}
+						//playing.shootEnemy(t,e);
 					}
 					else	//dont shoot enemies
 					{
@@ -59,7 +66,6 @@ public class TowerManager {
 					}					
 				}
 			}
-		}
 	}
 
 	private boolean isEnemyInRange(Tower t, Enemy e) {
