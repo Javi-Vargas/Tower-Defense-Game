@@ -11,6 +11,7 @@ import main.Game;
 import managers.EnemyManager;
 import managers.ProjectileManager;
 import managers.TowerManager;
+import managers.WaveManager;
 import objects.PathPoint;
 import objects.Tower;
 import ui.ActionBar;
@@ -26,6 +27,7 @@ public class Playing extends GameScene implements SceneMethods{
 	private ProjectileManager projManager;
 	private PathPoint start,end;
 	private Tower selectedTower;
+	private WaveManager waveManager;
 	
 	public Playing(Game game) {
 		super(game);
@@ -36,6 +38,7 @@ public class Playing extends GameScene implements SceneMethods{
 		enemyManager = new EnemyManager(this, start, end);
 		towerManager = new TowerManager(this);
 		projManager = new ProjectileManager(this);
+		waveManager = new WaveManager(this);
 		
 		
 	}
@@ -123,6 +126,10 @@ public class Playing extends GameScene implements SceneMethods{
 		int id = lvl[y/32][x/32];
 		return game.getTileManager().getTile(id).getTileType();
 	}
+	
+	public void shootEnemy(Tower t, Enemy e) {
+		projManager.newProjectile(t, e);		
+	}
 
 	@Override
 	public void mouseClicked(int x, int y) {
@@ -192,6 +199,11 @@ public class Playing extends GameScene implements SceneMethods{
 	}
 
 
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyChar() == KeyEvent.VK_ESCAPE)
+			selectedTower = null;
+	}
+
 	@Override
 	public void mouseDragged(int x, int y) {
 	}
@@ -206,12 +218,8 @@ public class Playing extends GameScene implements SceneMethods{
 		return enemyManager;
 	}
 
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyChar() == KeyEvent.VK_ESCAPE)
-			selectedTower = null;
-	}
-
-	public void shootEnemy(Tower t, Enemy e) {
-		projManager.newProjectile(t, e);		
+	public WaveManager getWaveManager()
+	{
+		return waveManager;
 	}
 }

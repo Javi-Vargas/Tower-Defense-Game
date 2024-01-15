@@ -35,13 +35,48 @@ public class EnemyManager {
 		this.end = end;	// this updates the previous method of adding enemies to where we already provide where its gonna be 
 		
 		loadEffectImg();
-		addEnemy(ORC);
-		addEnemy(BAT);
-		addEnemy(KNIGHT);
-		addEnemy(WOLF);
+//		addEnemy(ORC);
+//		addEnemy(BAT);
+//		addEnemy(KNIGHT);
+//		addEnemy(WOLF);
 		loadEnemyImgs();
 	}
 	
+	public void update()
+	{
+		
+		updateWaveManager();
+		if(isTimeForNewEnemy())
+		{
+			spawnEnemy();
+		}
+		
+		for(Enemy e: enemies)
+		{
+			if(e.isAlive())
+			{
+				updateEnemyMove(e);
+			}
+			
+		}
+			
+	}
+	
+	private void updateWaveManager() {
+		playing.getWaveManager().update();
+	}
+
+	private void spawnEnemy() {
+		addEnemy(playing.getWaveManager().getNextEnemy());
+	}
+
+	private boolean isTimeForNewEnemy() {
+		if(playing.getWaveManager().isTimeForNewEnemy())
+			if(playing.getWaveManager().isThereMoreEnemiesInWave())
+				return true;
+		return false;
+	}
+
 	private void loadEffectImg() {
 		slowEffect = LoadSave.getSpriteAtlas().getSubimage(32*9, 32*2, 32, 32);
 	}
@@ -71,19 +106,6 @@ public class EnemyManager {
 		BufferedImage atlas = LoadSave.getSpriteAtlas();
 		for(int i=0; i<4;i++)
 			enemyImgs[i] = atlas.getSubimage(i*32, 32, 32, 32);
-	}
-
-	public void update()
-	{
-		for(Enemy e: enemies)
-		{
-			if(e.isAlive())
-			{
-				updateEnemyMove(e);
-			}
-			
-		}
-			
 	}
 	
 	private void updateEnemyMove(Enemy e) {
