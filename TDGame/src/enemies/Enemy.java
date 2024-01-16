@@ -1,12 +1,16 @@
 package enemies;
 
 import java.awt.Rectangle;
+
+import managers.EnemyManager;
+
 import static helpz.Constants.Direction.*;
 
 //we make the Enemies class an 'Abstract class'
 //this is so that we cannot create enemy from enemy class only from orc, wolf,bat, etc
 public abstract class Enemy {
 
+	protected EnemyManager enemyManager;
 	protected float x, y;
 	protected Rectangle bounds;
 	protected int health;
@@ -20,12 +24,13 @@ public abstract class Enemy {
 	
 	
 	//can Pick up at 4min in the video episode 14
-	public Enemy(float x, float y, int ID, int enemyType)
+	public Enemy(float x, float y, int ID, int enemyType, EnemyManager enemyManager)
 	{
 		this.x=x;
 		this.y =y;
 		this.ID = ID;
 		this.enemyType = enemyType;
+		this.enemyManager = enemyManager;
 		bounds = new Rectangle((int)x, (int)y, 32,32);
 		lastDir = -1;
 		setStartHealth();
@@ -40,7 +45,10 @@ public abstract class Enemy {
 	public void hurt(int dmg) {
 		this.health -= dmg;
 		if(health <= 0)
+		{
 			alive = false;
+			enemyManager.rewardPlayer(enemyType);
+		}
 	}
 	
 	public void slow() {
@@ -129,5 +137,10 @@ public abstract class Enemy {
 	public boolean isSlowed()
 	{
 		return slowTick < slowTickLimit;
+	}
+
+	public void kill() {	//kills enemy when reaches the end
+		alive = false;
+		health = 0;
 	}
 }

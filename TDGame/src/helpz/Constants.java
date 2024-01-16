@@ -8,6 +8,20 @@ public class Constants {
 		public static final int ARCHER = 1;
 		public static final int WIZARD = 2;
 		
+		public static int GetTowerCost(int towerType)
+		{
+			switch(towerType)
+			{
+			case CANNON:
+				return 65;
+			case ARCHER:
+				return 30;
+			case WIZARD:
+				return 45;
+			}
+			return 0;
+		}
+		
 		public static String GetName(int towerType)
 		{
 			switch(towerType)
@@ -83,6 +97,23 @@ public class Constants {
 		public static final int BAT = 1;
 		public static final int KNIGHT = 2;
 		public static final int WOLF = 3;
+		
+		public static int GetReward(int enemyType)
+		{
+			switch(enemyType)
+			{
+			case ORC:
+				return 5;
+			case BAT:
+				return 5;
+			case KNIGHT:
+				return 25;
+			case WOLF:
+				return 10;
+			}
+			
+			return 0;
+		}
 		
 		public static float GetSpeed(int enemyType) //to vary speed of each enemy
 		{

@@ -28,6 +28,7 @@ public class Playing extends GameScene implements SceneMethods{
 	private PathPoint start,end;
 	private Tower selectedTower;
 	private WaveManager waveManager;
+	private int goldTick;
 	
 	public Playing(Game game) {
 		super(game);
@@ -59,6 +60,11 @@ public class Playing extends GameScene implements SceneMethods{
 	{
 		updateTick();
 		waveManager.update();
+		
+		//passive gold income for player to spend aka 'gold tick'
+		goldTick++;
+		if(goldTick % (60*3) == 0)
+			actionBar.addFunds(3);
 		
 		if(isAllEnemiesDead())
 		{
@@ -197,10 +203,13 @@ public class Playing extends GameScene implements SceneMethods{
 			{
 				if(isTileGrass(mouseX,mouseY))
 				{
+					//can place a check here to see if can afford the tower before even placing it
 					if(getTowerAt(mouseX, mouseY) == null)
 					{
 						towerManager.addTower(selectedTower, mouseX, mouseY);
-						selectedTower = null;						
+						purchaseTower(selectedTower.getTowerType()); 	//remove gold
+						selectedTower = null;
+						
 					}
 				}
 			}
@@ -212,6 +221,10 @@ public class Playing extends GameScene implements SceneMethods{
 			}
 	}
 
+
+	private void purchaseTower(int towerType) {
+		actionBar.purchaseTower(towerType);
+	}
 
 	private Tower getTowerAt(int x, int y) {
 		return towerManager.getTowerAt(x,y);
@@ -258,6 +271,11 @@ public class Playing extends GameScene implements SceneMethods{
 
 	@Override
 	public void mouseDragged(int x, int y) {
+	}
+	
+	public void rewardPlayer(int enemyType)
+	{
+		actionBar.addFunds(helpz.Constants.Enemies.GetReward(enemyType));
 	}
 	
 	public TowerManager getTowerManager()
