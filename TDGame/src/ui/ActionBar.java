@@ -6,6 +6,7 @@ import static main.GameStates.SetGameState;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.text.DecimalFormat;
 
 import helpz.Constants.Towers;
 import objects.Tower;
@@ -19,11 +20,14 @@ public class ActionBar extends Bar{
 	private MyButton[] towerButtons;
 	private Tower selectedTower;
 	private Tower displayedTower;
+	
+	private DecimalFormat formatter;
 		
 	public ActionBar(int x, int y, int width, int height, Playing playing)
 	{
 		super(x,y,width,height);
 		this.playing = playing;
+		formatter = new DecimalFormat("0.0");
 		
 		initButtons();
 	}
@@ -66,8 +70,46 @@ public class ActionBar extends Bar{
 		
 		//DisplayedTOwer
 		drawDisplayedTower(g);
+		
+		//Wave Info
+		drawWaveInfo(g);
 	}
 	
+	private void drawWaveInfo(Graphics g) {
+		g.setFont(new Font("LucidaSans", Font.BOLD, 20));
+		drawWaveTimerInfo(g);
+		drawEnemiesLeftInfo(g);
+		drawWavesLeftInfo(g);
+	}
+	
+	private void drawWavesLeftInfo(Graphics g) {
+		int current = playing.getWaveManager().getWaveIndex();
+		int size = playing.getWaveManager().getWaves().size();
+		g.drawString("Wave " + (current + 1) + " / " + size, 425, 690);
+	}
+
+
+	private void drawEnemiesLeftInfo(Graphics g) {
+		int remaining = playing.getEnemyManager().getAmountOfAliveEnemies();
+		g.drawString("Enemies Left: " + remaining, 420, 720);
+	}
+
+
+	private void drawWaveTimerInfo(Graphics g) {
+		if (playing.getWaveManager().isWaveTimerStarted()) {
+			g.setColor(Color.black);
+			float timeLeft = playing.getWaveManager().getTimeLeft();
+			String formattedText = formatter.format(timeLeft);
+			g.drawString("Time Left: " + formattedText, 425, 660);
+		}
+//		if (playing.getWaveManager().isThereMoreEnemiesInWave() && playing.getWaveManager().getWaves().size() < 1) {
+//			g.setColor(Color.black);
+//			float timeLeft = playing.getWaveManager().getTimeLeft();
+//			String formattedText = formatter.format(timeLeft);
+//			g.drawString("Time Left: " + formattedText, 425, 660);
+//		}
+	}
+
 	private void drawDisplayedTower(Graphics g) {
 		if(displayedTower != null)
 		{

@@ -43,40 +43,16 @@ public class EnemyManager {
 	}
 	
 	public void update()
-	{
-		
-		updateWaveManager();
-		if(isTimeForNewEnemy())
-		{
-			spawnEnemy();
-		}
-		
+	{		
 		for(Enemy e: enemies)
 		{
 			if(e.isAlive())
 			{
 				updateEnemyMove(e);
-			}
-			
-		}
-			
+			}	
+		}		
 	}
 	
-	private void updateWaveManager() {
-		playing.getWaveManager().update();
-	}
-
-	private void spawnEnemy() {
-		addEnemy(playing.getWaveManager().getNextEnemy());
-	}
-
-	private boolean isTimeForNewEnemy() {
-		if(playing.getWaveManager().isTimeForNewEnemy())
-			if(playing.getWaveManager().isThereMoreEnemiesInWave())
-				return true;
-		return false;
-	}
-
 	private void loadEffectImg() {
 		slowEffect = LoadSave.getSpriteAtlas().getSubimage(32*9, 32*2, 32, 32);
 	}
@@ -113,9 +89,7 @@ public class EnemyManager {
 		{
 			setNewDirectionAndMove(e);
 		}
-		
-		//e pos
-		//e dir
+	
 		//tile at new possible position
 		int newX = (int)(e.getX() + getSpeedAndWidth(e.getLastDir(), e.getEnemyType()));
 		int newY = (int)(e.getY() + getSpeedAndHeight(e.getLastDir(), e.getEnemyType()));	//need to cast to int because we'll use whole numbers to check tiles
@@ -127,7 +101,8 @@ public class EnemyManager {
 		}
 		else if(isAtEnd(e))
 		{
-			System.out.println("Lives Lost");
+			e.kill();
+			System.out.println("A life is lost!");
 		}
 		else
 		{
@@ -221,7 +196,7 @@ public class EnemyManager {
 
 		return 0;
 	}
-
+	
 	public void addEnemy(int enemyType)
 	{//create an enemy in the map	
 		
@@ -246,6 +221,10 @@ public class EnemyManager {
 		}
 	}
 	
+	public void spawnEnemy(int nextEnemy) {
+		addEnemy(nextEnemy);
+	}
+	
 	private void drawHealthBar(Enemy e, Graphics g) {
 		g.setColor(Color.red);
 		g.fillRect((int)e.getX()+16-(getNewBarWidth(e)/2), (int)e.getY()-10, getNewBarWidth(e), 3);
@@ -263,5 +242,13 @@ public class EnemyManager {
 	public ArrayList<Enemy> getEnemies()
 	{
 		return enemies;
+	}
+
+	public int getAmountOfAliveEnemies() {
+		int size = 0;
+		for(Enemy e: enemies)
+			if(e.isAlive())
+				size++;
+		return size;
 	}
 }

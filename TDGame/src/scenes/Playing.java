@@ -58,9 +58,59 @@ public class Playing extends GameScene implements SceneMethods{
 	public void update()
 	{
 		updateTick();
+		waveManager.update();
+		
+		if(isAllEnemiesDead())
+		{
+			if(isThereMoreWaves())
+			{//check wave timer
+				waveManager.startWaveTimer();
+				if(isWaveTimerOver())
+				{
+					waveManager.increaseWaveIndex();
+					enemyManager.getEnemies().clear();
+					waveManager.resetEnemyIndex();
+				}				
+			}	
+		}
+		
+		if(isTimeForNewEnemy())
+		{
+			spawnEnemy();
+		}
+		
 		enemyManager.update();
 		towerManager.update();	//created an update method for the towerManager
 		projManager.update();
+	}
+	
+	private boolean isWaveTimerOver() {
+		return waveManager.isWaveTimerOver();
+	}
+
+	private boolean isThereMoreWaves() {
+		return waveManager.isThereMoreWaves();
+	}
+
+	private boolean isAllEnemiesDead() {
+		if(waveManager.isThereMoreEnemiesInWave())
+			return false;
+		
+		for(Enemy e: enemyManager.getEnemies())
+			if(e.isAlive())
+				return false;
+		return true;
+	}
+
+	private void spawnEnemy() {
+		enemyManager.spawnEnemy(waveManager.getNextEnemy());
+	}
+
+	private boolean isTimeForNewEnemy() {
+		if(waveManager.isTimeForNewEnemy())
+			if(waveManager.isThereMoreEnemiesInWave())
+				return true;
+		return false;
 	}
 	
 	public void setSelectedTower(Tower selectedTower) {
@@ -77,8 +127,13 @@ public class Playing extends GameScene implements SceneMethods{
 		
 		drawSelectedTower(g);
 		drawHighlight(g);
+		drawWaveInfos(g);
 	}
 	
+	private void drawWaveInfos(Graphics g) {
+
+	}
+
 	private void drawHighlight(Graphics g) {
 		g.setColor(Color.yellow);
 		g.drawRect(mouseX, mouseY, 32, 32);
@@ -153,10 +208,7 @@ public class Playing extends GameScene implements SceneMethods{
 			{
 				//get tower if exists on x,y
 				Tower t = getTowerAt(mouseX, mouseY);
-//				if(t== null)
-//					return;
-//				else
-					actionBar.displayTower(t);
+				actionBar.displayTower(t);
 			}
 	}
 
