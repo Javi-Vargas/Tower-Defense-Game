@@ -79,7 +79,17 @@ public class ProjectileManager {
 				rotate += 180;
 		}
 
-		
+		for(Projectile p: projectiles)	//functionality to reuse projectiles instead of just adding forever to the projectile array and potentially slow down the game
+		{
+			if(!p.isActive()) {
+				if(p.getProjectileType() == type)
+				{
+					p.reuse(t.getX()+16, t.getY()+16, xSpeed, ySpeed, t.getDmg(), rotate);
+					return;
+				}
+			}
+					
+		}
 		projectiles.add(new Projectile(t.getX()+16, t.getY()+16, xSpeed, ySpeed, t.getDmg(), rotate, proj_id++, type));
 		
 	}
