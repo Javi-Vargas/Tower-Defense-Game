@@ -107,5 +107,11 @@ public class TowerManager {
 			if(t.getId() == displayedTower.getId())
 				t.upgradeTower();
 	}
+	
+	public void reset()
+	{
+		towers.clear();
+		towerAmount = 0;
+	}
 
 }

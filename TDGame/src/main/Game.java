@@ -10,6 +10,7 @@ import inputs.KeyboardListener;
 import inputs.MyMouseListener;
 import managers.TileManager;
 import scenes.Editing;
+import scenes.GameOver;
 import scenes.Menu;
 import scenes.Playing;
 import scenes.Settings;
@@ -29,6 +30,7 @@ public class Game extends JFrame implements Runnable{	//the class that will run 
 	private Settings settings;
 	private Editing editing;
 	private TileManager tileManager;
+	private GameOver gameOver;
 	
 	public static void main(String[] args) {
 		Game game = new Game();
@@ -59,8 +61,9 @@ public class Game extends JFrame implements Runnable{	//the class that will run 
 		playing = new Playing(this);
 		settings = new Settings(this);
 		editing = new Editing(this);
+		gameOver = new GameOver(this);
 	}
-	
+
 	private void createDefaultLevel() {
 		int[] arr = new int[400];	//creates a level with the dimensions 
 		for(int i=0; i<arr.length; i++)
@@ -158,6 +161,10 @@ public class Game extends JFrame implements Runnable{	//the class that will run 
 	public TileManager getTileManager()
 	{
 		return tileManager;
+	}
+	
+	public GameOver getGameOver() {
+		return gameOver;
 	}
 	
 	

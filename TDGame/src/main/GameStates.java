@@ -5,7 +5,8 @@ public enum GameStates {	//an enum is a special class that stores constant value
 	PLAYING,
 	MENU,
 	EDIT,
-	SETTINGS;
+	SETTINGS,
+	GAME_OVER;
 	
 	public static GameStates gameState = MENU;
 	

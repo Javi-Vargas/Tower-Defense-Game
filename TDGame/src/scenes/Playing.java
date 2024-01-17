@@ -21,13 +21,13 @@ public class Playing extends GameScene implements SceneMethods{
 
 	private int[][] lvl;
 	private ActionBar actionBar;
-	private EnemyManager enemyManager;
 	private int mouseX, mouseY;
+	private EnemyManager enemyManager;
 	private TowerManager towerManager;
 	private ProjectileManager projManager;
+	private WaveManager waveManager;
 	private PathPoint start,end;
 	private Tower selectedTower;
-	private WaveManager waveManager;
 	private int goldTick;
 	private boolean gamePaused = false;
 	
@@ -313,5 +313,24 @@ public class Playing extends GameScene implements SceneMethods{
 
 	public void upgradeTower(Tower displayedTower) {
 		towerManager.upgradeTower(displayedTower);
+	}
+
+	public void removeOneLife() {
+		actionBar.removeOneLife();
+	}
+
+	public void resetEverything() {
+		actionBar.resetEverything();
+		enemyManager.reset();
+		towerManager.reset();
+		projManager.reset();
+		waveManager.reset();
+		
+		mouseX = 0;
+		mouseY = 0;
+		goldTick = 0;
+		
+		selectedTower = null;
+		gamePaused = false;
 	}
 }

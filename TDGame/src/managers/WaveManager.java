@@ -100,4 +100,19 @@ public class WaveManager {
 	public boolean isWaveTimerStarted(){
 		return waveStartTimer;
 	}
+	
+	public void reset()
+	{
+		waves.clear();
+		createWaves();
+		
+		enemyIndex = 0;
+		waveIndex = 0;
+		
+		waveStartTimer = false;
+		waveTickTimerOver = false;
+		waveTick = 0;
+		enemySpawnTick = enemySpawnTickLimit;
+		
+	}
 }

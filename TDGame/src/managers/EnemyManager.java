@@ -102,7 +102,8 @@ public class EnemyManager {
 		else if(isAtEnd(e))
 		{
 			e.kill();
-			System.out.println("A life is lost!");
+			playing.removeOneLife();
+//			System.out.println("A life is lost!");
 		}
 		else
 		{
@@ -254,5 +255,10 @@ public class EnemyManager {
 
 	public void rewardPlayer(int enemyType) {
 		playing.rewardPlayer(enemyType);
+	}
+	
+	public void reset()
+	{
+		enemies.clear();
 	}
 }
