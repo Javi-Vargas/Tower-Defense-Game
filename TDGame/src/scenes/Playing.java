@@ -29,6 +29,7 @@ public class Playing extends GameScene implements SceneMethods{
 	private Tower selectedTower;
 	private WaveManager waveManager;
 	private int goldTick;
+	private boolean gamePaused = false;
 	
 	public Playing(Game game) {
 		super(game);
@@ -58,36 +59,39 @@ public class Playing extends GameScene implements SceneMethods{
 	
 	public void update()
 	{
-		updateTick();
-		waveManager.update();
-		
-		//passive gold income for player to spend aka 'gold tick'
-		goldTick++;
-		if(goldTick % (60*3) == 0)
-			actionBar.addFunds(1);
-		
-		if(isAllEnemiesDead())
+		if(!gamePaused)
 		{
-			if(isThereMoreWaves())
-			{//check wave timer
-				waveManager.startWaveTimer();
-				if(isWaveTimerOver())
-				{
-					waveManager.increaseWaveIndex();
-					enemyManager.getEnemies().clear();
-					waveManager.resetEnemyIndex();
-				}				
-			}	
+			updateTick();
+			waveManager.update();
+			
+			//passive gold income for player to spend aka 'gold tick'
+			goldTick++;
+			if(goldTick % (60*3) == 0)
+				actionBar.addFunds(1);
+			
+			if(isAllEnemiesDead())
+			{
+				if(isThereMoreWaves())
+				{//check wave timer
+					waveManager.startWaveTimer();
+					if(isWaveTimerOver())
+					{
+						waveManager.increaseWaveIndex();
+						enemyManager.getEnemies().clear();
+						waveManager.resetEnemyIndex();
+					}				
+				}	
+			}
+			
+			if(isTimeForNewEnemy())
+			{
+				spawnEnemy();
+			}
+			
+			enemyManager.update();
+			towerManager.update();	//created an update method for the towerManager
+			projManager.update();			
 		}
-		
-		if(isTimeForNewEnemy())
-		{
-			spawnEnemy();
-		}
-		
-		enemyManager.update();
-		towerManager.update();	//created an update method for the towerManager
-		projManager.update();
 	}
 	
 	private boolean isWaveTimerOver() {
@@ -238,7 +242,7 @@ public class Playing extends GameScene implements SceneMethods{
 
 	@Override
 	public void mouseMoved(int x, int y) {
-		if(y>= 640)
+		if(y>= 640 && !gamePaused)
 		{
 			actionBar.mouseMoved(x, y);
 		}
@@ -251,7 +255,7 @@ public class Playing extends GameScene implements SceneMethods{
 
 	@Override
 	public void mousePressed(int x, int y) {
-		if(y>= 640)
+		if(y>= 640 && !gamePaused)
 		{
 			actionBar.mousePressed(x, y);
 		}
@@ -278,6 +282,11 @@ public class Playing extends GameScene implements SceneMethods{
 		actionBar.addFunds(helpz.Constants.Enemies.GetReward(enemyType));
 	}
 	
+	public void setGamePaused(boolean gamePaused)
+	{
+		this.gamePaused = gamePaused;
+	}
+	
 	public TowerManager getTowerManager()
 	{
 		return towerManager;
@@ -291,6 +300,11 @@ public class Playing extends GameScene implements SceneMethods{
 	public WaveManager getWaveManager()
 	{
 		return waveManager;
+	}
+	
+	public boolean isGamePaused()
+	{
+		return gamePaused;
 	}
 
 	public void removeTower(Tower displayedTower) {

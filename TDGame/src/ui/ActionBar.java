@@ -14,7 +14,7 @@ import scenes.Playing;
 
 public class ActionBar extends Bar{
 	
-	private MyButton bMenu;
+	private MyButton bMenu, bPause;
 	private Playing playing;
 	
 	private MyButton[] towerButtons;
@@ -39,6 +39,7 @@ public class ActionBar extends Bar{
 	
 	private void initButtons() {
 		bMenu = new MyButton("Menu",  2,642, 100,30);
+		bPause = new MyButton("Pause",  2,682, 100,30);
 		
 		towerButtons = new MyButton[3];
 		int w =50;
@@ -56,6 +57,7 @@ public class ActionBar extends Bar{
 	
 	private void drawButtons(Graphics g) {
 		bMenu.draw(g);
+		bPause.draw(g);
 		
 		for(MyButton b: towerButtons)
 		{
@@ -86,6 +88,10 @@ public class ActionBar extends Bar{
 		
 		if(showTowerCost)
 			drawTowerCost(g);
+		
+		//game paused text
+		if(playing.isGamePaused())
+			g.drawString("Game is Paused", 50, 770);
 	}
 	
 	private void drawTowerCost(Graphics g) {
@@ -226,6 +232,10 @@ public class ActionBar extends Bar{
 	public void mouseClicked(int x, int y) {
 		if (bMenu.getBounds().contains(x, y))
 			SetGameState(MENU);
+		else if(bPause.getBounds().contains(x,y))
+		{
+			togglePause();
+		}
 		else {
 			
 			if(displayedTower != null)
@@ -254,6 +264,17 @@ public class ActionBar extends Bar{
 		}
 	}
 
+	private void togglePause() {
+		playing.setGamePaused(!playing.isGamePaused());
+		
+		//now toggle button text to say pause/unpause accordingly
+		if(playing.isGamePaused())
+			bPause.setText("Unpause");
+		else
+			bPause.setText("Pause");
+	}
+
+
 	private void upgradeTowerClicked() {
 		playing.upgradeTower(displayedTower);
 		gold -= getUpgradeAmount(displayedTower);
@@ -273,6 +294,7 @@ public class ActionBar extends Bar{
 
 	public void mouseMoved(int x, int y) {
 		bMenu.setMouseOver(false);
+		bPause.setMouseOver(false);
 		showTowerCost = false;
 		sellTower.setMouseOver(false);
 		upgradeTower.setMouseOver(false);
@@ -282,6 +304,10 @@ public class ActionBar extends Bar{
 
 		if (bMenu.getBounds().contains(x, y))
 			bMenu.setMouseOver(true);
+		else if(bPause.getBounds().contains(x,y))
+		{
+			bPause.setMouseOver(true);
+		}
 		else {
 			
 			if(displayedTower != null)
@@ -311,6 +337,10 @@ public class ActionBar extends Bar{
 	public void mousePressed(int x, int y) {
 		if (bMenu.getBounds().contains(x, y))
 			bMenu.setMousePressed(true);
+		else if(bPause.getBounds().contains(x,y))
+		{
+			bPause.setMousePressed(true);
+		}
 		else
 		{
 			if(displayedTower != null)
@@ -336,6 +366,7 @@ public class ActionBar extends Bar{
 
 	public void mouseReleased(int x, int y) {
 		bMenu.resetBooleans();
+		bPause.resetBooleans();
 		for (MyButton b : towerButtons)
 			b.resetBooleans();
 		sellTower.resetBooleans();
