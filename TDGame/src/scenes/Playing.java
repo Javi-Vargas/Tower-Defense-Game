@@ -64,7 +64,7 @@ public class Playing extends GameScene implements SceneMethods{
 		//passive gold income for player to spend aka 'gold tick'
 		goldTick++;
 		if(goldTick % (60*3) == 0)
-			actionBar.addFunds(3);
+			actionBar.addFunds(1);
 		
 		if(isAllEnemiesDead())
 		{
@@ -291,5 +291,13 @@ public class Playing extends GameScene implements SceneMethods{
 	public WaveManager getWaveManager()
 	{
 		return waveManager;
+	}
+
+	public void removeTower(Tower displayedTower) {
+		towerManager.removeTower(displayedTower);
+	}
+
+	public void upgradeTower(Tower displayedTower) {
+		towerManager.upgradeTower(displayedTower);
 	}
 }
