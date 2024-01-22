@@ -39,9 +39,12 @@ public class Render {
 		
 		case EDIT: 
 			game.getEditor().render(g);
-			
+			break; //i added this break to edit so if something breaks the game remove this cuz it was working without it
 		case GAME_OVER:
 			game.getGameOver().render(g);
+			break;
+		case GAME_WIN:
+			game.getGameWin().render(g);
 			break;
 			
 		default:

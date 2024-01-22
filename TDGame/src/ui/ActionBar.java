@@ -24,13 +24,14 @@ public class ActionBar extends Bar{
 	
 	private DecimalFormat formatter;
 	private int gold = 100;
-	private int lives = 1;
+	private int lives = 5;
 	private int replayLives = lives;
 	
 	private boolean showTowerCost;
 	private int towerCostType;
+	
 	//private int enemiesLeft = playing.getEnemyManager().getAmountOfAliveEnemies();
-	//private int wavesLeft = playing.getWaveManager().getWaves().size();
+	//private int numWavesLeft = playing.getWaveManager().getWaves().size();
 		
 	public ActionBar(int x, int y, int width, int height, Playing playing)
 	{
@@ -96,7 +97,7 @@ public class ActionBar extends Bar{
 		
 		//game paused text
 		if(playing.isGamePaused())
-		{	g.drawString("Game is Paused", 50, 770);}
+		{	g.drawString("Game is Paused", 50, 780);}
 		
 		//lives
 		g.setColor(Color.black);
@@ -152,8 +153,8 @@ public class ActionBar extends Bar{
 		g.drawString("Wave " + (currentWave + 1) + " / " + totalWaves, 425, 770);
 //		if(theyBeatTheGame(currentWave, totalWaves, enemiesLeft))
 //			SetGameState(GAME_OVER);
-				if((currentWave+1) == totalWaves && lives > 0 &&  enemiesLeft == 0)	//these two lines
-			SetGameState(GAME_OVER);
+		if((currentWave+1) == totalWaves && lives > 0 &&  enemiesLeft == 0)	//these two lines
+			SetGameState(GAME_WIN);
 	}
 
 
@@ -400,6 +401,12 @@ public class ActionBar extends Bar{
 	
 	public int getLives() {
 		return lives;
+	}
+	
+	public int getWavesLeft() {
+		int currentWave = playing.getWaveManager().getWaveIndex();
+		int totalWaves = playing.getWaveManager().getWaves().size();
+		return currentWave%totalWaves;
 	}
 	
 	public void removeOneLife()

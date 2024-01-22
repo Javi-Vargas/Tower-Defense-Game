@@ -8,14 +8,14 @@ import main.Game;
 import ui.MyButton;
 import static main.GameStates.*;
 
-public class GameOver extends GameScene implements SceneMethods {
-
-	private MyButton bReplay, bGameOverMenu;
-
-	public GameOver(Game game) {
+public class GameWin extends GameScene implements SceneMethods{
+	
+	private MyButton bReplay, bGameWinMenu;
+	public GameWin(Game game) {
 		super(game);
 		initButtons();
 	}
+	
 
 	private void initButtons() {
 
@@ -25,29 +25,47 @@ public class GameOver extends GameScene implements SceneMethods {
 		int y = 300;
 		int yOffset = 100;
 
-		bGameOverMenu = new MyButton("Menu", x, y, w, h);
+		bGameWinMenu = new MyButton("Menu", x, y, w, h);
 		bReplay = new MyButton("Replay", x, y + yOffset, w, h);
 
 	}
 
 	@Override
 	public void render(Graphics g) {
-		drawGameOverStuff(g);	
+		drawGameWinStuff(g);
+		
 	}
 	
+	private void drawGameWinStuff(Graphics g) {
+		if(gameState == GAME_WIN)
+		{			
+			//System.out.println(gameState);
+			// game over text
+			g.setFont(new Font("LucidaSans", Font.BOLD, 50));
+			g.setColor(Color.red);
+			g.drawString("You Won!", 160, 80);
+			
+			// buttons
+			g.setFont(new Font("LucidaSans", Font.BOLD, 20));
+			bGameWinMenu.draw(g);
+			bReplay.draw(g);
+		}
+	}
+
 	private void drawGameOverStuff(Graphics g)
 	{
-		if(gameState == GAME_OVER)
+		if(gameState == GAME_WIN)
 		{						
 			// buttons
 			g.setFont(new Font("LucidaSans", Font.BOLD, 20));
-			bGameOverMenu.draw(g);
+			bGameWinMenu.draw(g);
 			bReplay.draw(g);
 			
 			// game over text
 			g.setFont(new Font("LucidaSans", Font.BOLD, 50));
 			g.setColor(Color.red);
 			g.drawString("Game Over!", 160, 80);
+
 		}
 	}
 
@@ -66,7 +84,7 @@ public class GameOver extends GameScene implements SceneMethods {
 
 	@Override
 	public void mouseClicked(int x, int y) {
-		if (bGameOverMenu.getBounds().contains(x, y)) {
+		if (bGameWinMenu.getBounds().contains(x, y)) {
 			SetGameState(MENU);
 			resetAll();
 		} else if (bReplay.getBounds().contains(x, y))
@@ -75,19 +93,19 @@ public class GameOver extends GameScene implements SceneMethods {
 
 	@Override
 	public void mouseMoved(int x, int y) {
-		bGameOverMenu.setMouseOver(false);
+		bGameWinMenu.setMouseOver(false);
 		bReplay.setMouseOver(false);
 
-		if (bGameOverMenu.getBounds().contains(x, y))
-			bGameOverMenu.setMouseOver(true);
+		if (bGameWinMenu.getBounds().contains(x, y))
+			bGameWinMenu.setMouseOver(true);
 		else if (bReplay.getBounds().contains(x, y))
 			bReplay.setMouseOver(true);
 	}
 
 	@Override
 	public void mousePressed(int x, int y) {
-		if (bGameOverMenu.getBounds().contains(x, y))
-			bGameOverMenu.setMousePressed(true);
+		if (bGameWinMenu.getBounds().contains(x, y))
+			bGameWinMenu.setMousePressed(true);
 		else if (bReplay.getBounds().contains(x, y))
 			bReplay.setMousePressed(true);
 
@@ -95,7 +113,7 @@ public class GameOver extends GameScene implements SceneMethods {
 
 	@Override
 	public void mouseReleased(int x, int y) {
-		bGameOverMenu.resetBooleans();
+		bGameWinMenu.resetBooleans();
 		bReplay.resetBooleans();
 
 	}

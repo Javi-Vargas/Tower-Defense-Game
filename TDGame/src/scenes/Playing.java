@@ -80,7 +80,8 @@ public class Playing extends GameScene implements SceneMethods{
 						enemyManager.getEnemies().clear();
 						waveManager.resetEnemyIndex();
 					}				
-				}	
+				}
+				//System.out.println(actionBar.getLives() + ", " + actionBar.getWavesLeft());
 			}
 			
 			if(isTimeForNewEnemy())
@@ -212,8 +213,7 @@ public class Playing extends GameScene implements SceneMethods{
 					{
 						towerManager.addTower(selectedTower, mouseX, mouseY);
 						purchaseTower(selectedTower.getTowerType()); 	//remove gold
-						selectedTower = null;
-						
+						selectedTower = null;	
 					}
 				}
 			}
