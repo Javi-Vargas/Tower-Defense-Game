@@ -24,10 +24,13 @@ public class ActionBar extends Bar{
 	
 	private DecimalFormat formatter;
 	private int gold = 100;
-	private int lives = 25;
+	private int lives = 1;
+	private int replayLives = lives;
 	
 	private boolean showTowerCost;
 	private int towerCostType;
+	//private int enemiesLeft = playing.getEnemyManager().getAmountOfAliveEnemies();
+	//private int wavesLeft = playing.getWaveManager().getWaves().size();
 		
 	public ActionBar(int x, int y, int width, int height, Playing playing)
 	{
@@ -142,9 +145,15 @@ public class ActionBar extends Bar{
 	}
 	
 	private void drawWavesLeftInfo(Graphics g) {
-		int current = playing.getWaveManager().getWaveIndex();
-		int size = playing.getWaveManager().getWaves().size();
-		g.drawString("Wave " + (current + 1) + " / " + size, 425, 770);
+		int currentWave = playing.getWaveManager().getWaveIndex();
+		int totalWaves = playing.getWaveManager().getWaves().size();
+		
+		int enemiesLeft = playing.getEnemyManager().getAmountOfAliveEnemies();
+		g.drawString("Wave " + (currentWave + 1) + " / " + totalWaves, 425, 770);
+//		if(theyBeatTheGame(currentWave, totalWaves, enemiesLeft))
+//			SetGameState(GAME_OVER);
+				if((currentWave+1) == totalWaves && lives > 0 &&  enemiesLeft == 0)	//these two lines
+			SetGameState(GAME_OVER);
 	}
 
 
@@ -400,10 +409,9 @@ public class ActionBar extends Bar{
 			SetGameState(GAME_OVER);
 			//System.out.println("GAME OVER!! :(");
 	}
-
-
+	
 	public void resetEverything() {
-		lives = 25;
+		lives = replayLives;
 		towerCostType = 0;
 		showTowerCost = false;
 		gold = 100;
